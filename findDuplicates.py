@@ -11,7 +11,7 @@ def findDuplicates(fileName):
     #create a track name dictionary
     trackNames = {}
     #iterate through the tracks
-    for trackId, track in tracks:
+    for trackId, track in tracks.items():
         try:
             name = track['Name']
             duration = ['Total Time']
@@ -22,10 +22,32 @@ def findDuplicates(fileName):
                 if duration//1000 == trackNames[name][0]//1000:
                     count = trackNames[name][1]
                     trackNames[name] = (duration, count+1)
+
             else:
-                #add dictionary entry as tuple (duration, count )
+            #add dictionary entry as tuple (duration, count )
                 trackNames[name] = (duration, 1)
+                # print(trackNames[name])
+        #if track does not have name - pass
         except:
             pass
+
+    #store duplicates as (name, count) tuples
+    dups= []
+    for k, v in trackNames.items():
+        if v[1] >1:
+            dups.append(v[1], k)
+
+    #save duplicates to a file
+    if len(dups)>0:
+        print("Found {} duplicates. Track names saved to dups.txt".format(len(dups)))
+        f = open("dups.txt", "w")
+        for val in dups:
+            f.write("{} {}\n".format(val[0], val[1]))
+        f.close()
+    else:
+        print("No duplicats were found")
+
+
+
 
 findDuplicates('Library.xml')
